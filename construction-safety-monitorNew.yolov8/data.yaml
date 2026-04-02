@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['helmet', 'vest']
+
+roboflow:
+  workspace: dinithis-workspace-asfor
+  project: dinithis-workspace-asfor
+  version: dataset
+  license: Private
+  url: https://app.roboflow.com/dinithis-workspace-asfor/dinithis-workspace-asfor/dataset

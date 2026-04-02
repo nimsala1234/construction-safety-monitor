@@ -1,65 +1,73 @@
-# Dataset Strategy
+# Dataset Documentation
 
-## Objective
-Build a custom dataset for construction safety monitoring focused on worker detection and PPE compliance.
+## Data Collection
+This project focuses on construction safety monitoring through PPE detection. The dataset used for this work was created by extending an existing public PPE dataset and organizing it for custom training.
 
-## Classes
-- person
+The starting dataset was a public Kaggle dataset containing annotated construction PPE images. The original dataset included labels for:
+- Safety Helmet
+- Reflective Jacket
+
+These labels were mapped into the project’s final PPE classes:
 - helmet
 - vest
 
-## Data Collection Approach
-This dataset will be created by combining:
-1. Publicly available PPE/construction safety datasets
-2. Custom-added images and video frames collected and annotated by the project author
+The dataset was imported into Roboflow, cleaned, and exported for training in Google Colab. The project primarily trained a custom detector for helmet and vest detection. Worker/person detection was handled separately at inference time using a pretrained YOLO person detector.
 
-## Why this approach was chosen
-This approach satisfies the assignment requirement for a custom dataset while allowing a manageable project scope and sufficient data diversity.
+## Dataset Source
+Base dataset source:
+- Kaggle PPE dataset containing Safety Helmet and Reflective Jacket annotations
 
-## Target Dataset Size
-- Public base: 700 images
-- Custom additions: 300 images
-- Final total: 1000 images
+## Custom Additions / Changes
+The original dataset labels were adapted to match the project class names:
+- Safety-Helmet → helmet
+- Reflective-Jacket → vest
 
-## Required Diversity
-The dataset will include:
-- indoor and outdoor construction settings
-- daylight, shadow, overcast, and artificial lighting
-- safe and unsafe scenes
-- single-worker and multi-worker scenes
-- close, medium, and far worker visibility
+The dataset was then restructured into train, validation, and test splits for training in Colab.
+
+## Dataset Size
+The final dataset contained:
+
+- Train images: Images = 694
+                Labels = 694
+- Validation images: Images = 195
+                     Labels = 195
+- Test images: Images = 100
+               Labels = 100
+- Total images: Images = 989
+                Labels = 989
+## Class Distribution
+The project used 2 PPE classes:
+
+- helmet
+- vest
+
+Validation class distribution:
+- Helmet instances: 373
+- Vest instances: 317
+
+If you want, you can also add the train/test class counts if available.
 
 ## Annotation Approach
+The dataset uses object detection bounding box annotations in YOLO format.
 
-### Annotation Tool
-The dataset is annotated using Roboflow Annotate with bounding boxes and exported in YOLO format.
+Annotation approach:
+- Each visible helmet was annotated with a bounding box and labelled as `helmet`
+- Each visible safety vest was annotated with a bounding box and labelled as `vest`
+- Bounding boxes were kept tight around the visible PPE item
+- Only visible objects were labelled; hidden or unclear objects were not guessed
 
-### Object Classes
-- person
-- helmet
-- vest
+The project did not rely on custom person annotations for training. Instead, worker detection was performed using a pretrained person detector during inference, while the custom-trained model focused on PPE detection.
 
-### Labelling Policy
-- `person`: every clearly visible worker/person in the construction scene
-- `helmet`: every clearly visible construction helmet
-- `vest`: every clearly visible high-visibility safety vest
+## Why This Dataset Strategy Was Chosen
+This dataset strategy was chosen to make the project feasible within the available time while still supporting the core task:
+- PPE detection using a custom-trained model
+- worker detection using a pretrained detector
+- rule-based compliance checking
+- safe/unsafe scene classification
 
-### Annotation Rules
-- Only visible objects are annotated; hidden or assumed objects are not labelled.
-- Bounding boxes are drawn tightly around each object.
-- Cropped or partially visible objects are labelled only for the visible portion.
-- Very small, highly blurred, or highly uncertain objects are skipped to preserve annotation quality.
-- In crowded scenes, each visible worker and PPE item is labelled separately.
-
-### Edge Cases
-- Occluded workers are labelled only if enough of the body is visible.
-- PPE is labelled only when clearly visible.
-- Far-away workers may be labelled as `person` without PPE labels if PPE cannot be reliably identified.
-
-## Planned Data Split
-- Train: 70%
-- Validation: 20%
-- Test: 10%
-
-## Notes
-Custom images will be added intentionally to improve variation in safety violations, worker distance, occlusion, and lighting conditions.
+## Limitations of the Dataset
+Some limitations of the dataset include:
+- no custom person class training in the final detector
+- variation in lighting and object size across images
+- some difficult cases such as occlusion and small distant workers
+- limited ability to capture all real-world construction scenarios

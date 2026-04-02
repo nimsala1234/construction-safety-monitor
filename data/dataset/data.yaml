@@ -1,0 +1,13 @@
+names:
+- helmet
+- vest
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: construction-safety-monitornew
+  url: https://universe.roboflow.com/dinithis-workspace-asfor/construction-safety-monitornew/dataset/1
+  version: 1
+  workspace: dinithis-workspace-asfor
+test: ../test/images
+train: ../train/images
+val: ../valid/images
