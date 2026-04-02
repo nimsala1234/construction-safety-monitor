@@ -55,7 +55,7 @@ Training setup:
 - Classes: helmet, vest
 - Base weights: YOLOv8 pretrained weights
 - Image size: 640
-- Epochs: 30
+- Epochs: 5
 - Batch size: 16
 - Environment: Google Colab
 
