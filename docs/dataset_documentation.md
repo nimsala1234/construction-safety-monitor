@@ -29,13 +29,32 @@ The dataset will include:
 - single-worker and multi-worker scenes
 - close, medium, and far worker visibility
 
-## Annotation Format
-Object detection bounding boxes in YOLO format.
+## Annotation Approach
 
-## Class Labels
-0 person
-1 helmet
-2 vest
+### Annotation Tool
+The dataset is annotated using Roboflow Annotate with bounding boxes and exported in YOLO format.
+
+### Object Classes
+- person
+- helmet
+- vest
+
+### Labelling Policy
+- `person`: every clearly visible worker/person in the construction scene
+- `helmet`: every clearly visible construction helmet
+- `vest`: every clearly visible high-visibility safety vest
+
+### Annotation Rules
+- Only visible objects are annotated; hidden or assumed objects are not labelled.
+- Bounding boxes are drawn tightly around each object.
+- Cropped or partially visible objects are labelled only for the visible portion.
+- Very small, highly blurred, or highly uncertain objects are skipped to preserve annotation quality.
+- In crowded scenes, each visible worker and PPE item is labelled separately.
+
+### Edge Cases
+- Occluded workers are labelled only if enough of the body is visible.
+- PPE is labelled only when clearly visible.
+- Far-away workers may be labelled as `person` without PPE labels if PPE cannot be reliably identified.
 
 ## Planned Data Split
 - Train: 70%
